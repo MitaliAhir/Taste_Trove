@@ -5,14 +5,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.tastetrove.navigation.AppNavHost
+import com.example.tastetrove.navigation.NavItem
 import com.example.tastetrove.scaffold.BottomBar
 import com.example.tastetrove.scaffold.TopBar
 import com.example.tastetrove.ui.theme.TasteTroveTheme
@@ -26,12 +28,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             TasteTroveTheme {
                 val navController = rememberNavController()
-                TasteTroveApp()
+                val selectedIndex = remember { mutableStateOf(0) }
+                val navItems = listOf(NavItem.Home, NavItem.Search, NavItem.SavedRecipes)
+
                 Scaffold (
-                    bottomBar = { BottomBar (onNavigate = {path ->
+                    bottomBar = { BottomBar (navItems,selectedIndex, onNavigate = { path ->
                         navController.navigate(path) })
                     },
-                    topBar = { TopBar() }
+                    topBar = { TopBar(selectedIndex, navItems) }
                 ){innerPadding ->
                     Column(
                         modifier = Modifier.padding(innerPadding)
@@ -59,16 +63,12 @@ class MainActivity : ComponentActivity() {
 //        recipeViewModel.searchRecipes("tomato, cheese")  // Example search query
     }
 }
-@Composable
-fun TasteTroveApp(){
 
-    //AppNavHost()
-}
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     TasteTroveTheme {
-        TasteTroveApp()
+
     }
 }

@@ -7,16 +7,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,21 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen() {
     Column {
-        // Top Bar with app name and settings icon
-//        TopAppBar(
-//            title = { Text("Discover") },
-//            actions = {
-//                IconButton(onClick = { }) {
-//                    Icon(Icons.Default.Settings, contentDescription = "Settings")
-//                }
-//            }
-//        )
-
-        // Search Bar
         SearchBarUI()
 
         // Recent Recipes or Suggestions
@@ -52,28 +35,11 @@ fun SearchScreen() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun SearchBarUI() {
     var searchText by remember { mutableStateOf("") }
     var activeStateOfSearchBar by remember { mutableStateOf(true) }
-//    SearchBar(
-//        query = searchText,
-//        onQueryChange = {
-//            searchText = it
-//        },
-//        onSearch = {
-//            activeStateOfSearchBar = true
-//        },
-//        active  = activeStateOfSearchBar,
-//        onActiveChange = {
-//            activeStateOfSearchBar = it
-//        },
-//        placeholder = { Text("Search for recipes...") },
-//        modifier = Modifier.fillMaxWidth().padding(16.dp),
-//        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") }
-//
-//    ) { }
 
     TextField(
         value = searchText,
