@@ -4,14 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.tastetrove.Model.RecipeViewModel
+import com.example.tastetrove.model.RecipeViewModel
 import com.example.tastetrove.views.HomeScreen
 import com.example.tastetrove.views.SavedRecipesScreen
 import com.example.tastetrove.views.SearchScreen
 
-
 @Composable
-fun AppNavHost(navController: NavHostController, viewModel: Lazy<RecipeViewModel>) {
+fun AppNavHost(navController: NavHostController, viewModel: RecipeViewModel) {
 
     NavHost(navController, startDestination = "home") {
         composable("home") {
@@ -21,9 +20,7 @@ fun AppNavHost(navController: NavHostController, viewModel: Lazy<RecipeViewModel
         }
         composable("search") {
             SearchScreen(
-                viewModel = viewModel,
-                onScreenLoading = TODO(),
-                onSearch = TODO()
+                viewModel = viewModel
             )
         }
         composable("saved") {
@@ -31,7 +28,4 @@ fun AppNavHost(navController: NavHostController, viewModel: Lazy<RecipeViewModel
         }
     }
 
-    fun upPress() {
-        navController.navigateUp()
-    }
 }

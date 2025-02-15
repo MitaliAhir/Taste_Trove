@@ -1,4 +1,4 @@
-package com.example.tastetrove.Model
+package com.example.tastetrove.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create

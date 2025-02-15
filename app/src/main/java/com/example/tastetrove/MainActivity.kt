@@ -1,5 +1,6 @@
 package com.example.tastetrove
 
+import RecipeRepository
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,43 +13,62 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
-import com.example.tastetrove.Model.RecipeViewModel
+import com.example.tastetrove.model.RecipeViewModel
+import com.example.tastetrove.model.RecipeViewModelFactory
 import com.example.tastetrove.navigation.AppNavHost
 import com.example.tastetrove.navigation.NavItem
+import com.example.tastetrove.networking.RecipeAPIService
 import com.example.tastetrove.scaffold.BottomBar
 import com.example.tastetrove.scaffold.TopBar
 import com.example.tastetrove.ui.theme.TasteTroveTheme
+import com.example.tastetrove.networking.RetrofitInstance
 
 class MainActivity : ComponentActivity() {
 
-    private lateinit var recipeViewModel: Lazy<RecipeViewModel>
+    private lateinit var recipeViewModel: RecipeViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // Create an instance of your RecipeAPIService
+        val apiService = RetrofitInstance.createService(RecipeAPIService::class.java)
+
+        // Create an instance of your RecipeRepository
+        val recipeRepository = RecipeRepository(apiService)
+
+        // Initialize the ViewModel with the factory
+        val factory = RecipeViewModelFactory(recipeRepository)
+        recipeViewModel = ViewModelProvider(this, factory).get(RecipeViewModel::class.java)
+
         setContent {
             TasteTroveTheme {
-                val navController = rememberNavController() // Create and remember instance of NavController across composables.
-                // (NavController should be in composable, not inside activity so we are going to add it in Theme)
+                val navController = rememberNavController()
                 val selectedIndex = remember { mutableStateOf(0) }
-                val navItems = listOf(NavItem.Home, NavItem.Search, NavItem.SavedRecipes) // Specify navigation structure
+                val navItems = listOf(NavItem.Home, NavItem.Search, NavItem.SavedRecipes)
 
-                Scaffold (
-                    bottomBar = { BottomBar (navItems,selectedIndex, onNavigate = { path ->
-                        navController.navigate(path) })
+                Scaffold(
+                    bottomBar = {
+                        BottomBar(navItems, selectedIndex, onNavigate = { path ->
+                            navController.navigate(path)
+                        })
                     },
                     topBar = { TopBar(selectedIndex, navItems) }
-                ){innerPadding ->
+                ) { innerPadding ->
                     Column(
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         AppNavHost(navController, viewModel = recipeViewModel)
-
                     }
                 }
             }
         }
-        // ViewModelProvider setup
+
+    }
+}
+// ViewModelProvider setup
 //        recipeViewModel = ViewModelProvider(this).get(RecipeViewModel::class.java)
 //        // Observe LiveData for recipes
 //        recipeViewModel.recipes.observe(this, Observer { recipes ->
@@ -63,9 +83,6 @@ class MainActivity : ComponentActivity() {
 //
 //        // Trigger recipe search
 //        recipeViewModel.searchRecipes("tomato, cheese")  // Example search query
-    }
-}
-
 
 @Preview(showBackground = true)
 @Composable

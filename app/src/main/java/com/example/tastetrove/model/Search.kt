@@ -1,4 +1,4 @@
-package com.example.tastetrove.Model
+package com.example.tastetrove.model
 
 
 import androidx.compose.runtime.Immutable

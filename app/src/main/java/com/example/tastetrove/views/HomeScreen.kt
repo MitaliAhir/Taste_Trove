@@ -2,9 +2,9 @@ package com.example.tastetrove.views
 
 
 import androidx.compose.runtime.Composable
-import com.example.tastetrove.Model.RecipeViewModel
+import com.example.tastetrove.model.RecipeViewModel
 
 @Composable
-fun HomeScreen(viewModel: Lazy<RecipeViewModel>) {
+fun HomeScreen(viewModel: RecipeViewModel) {
 
 }
