@@ -1,4 +1,4 @@
-import com.example.tastetrove.Recipe
+import com.example.tastetrove.Model.Recipe
 
 //package com.example.tastetrove
 //
@@ -13,9 +13,10 @@ import com.example.tastetrove.Recipe
 //}
 class RecipeRepository {
     fun searchRecipes(ingredients: String): List<Recipe>{
-        return listOf(Recipe("Recipe Name", "url", "30 min"),
-            Recipe("Recipe Name", "url", "40 min"),
-            Recipe("Recipe Name", "url", "50 min")
+        return listOf(
+            Recipe(88508304,"Recipe Name", "url", "30 min"),
+            Recipe(65435346, "Recipe Name", "url", "40 min"),
+            Recipe(53535543, "Recipe Name", "url", "50 min")
         )
     }
 }

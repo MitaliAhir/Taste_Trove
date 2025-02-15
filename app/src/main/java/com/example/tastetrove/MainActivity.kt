@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.example.tastetrove.Model.RecipeViewModel
 import com.example.tastetrove.navigation.AppNavHost
 import com.example.tastetrove.navigation.NavItem
 import com.example.tastetrove.scaffold.BottomBar
@@ -21,15 +22,16 @@ import com.example.tastetrove.ui.theme.TasteTroveTheme
 
 class MainActivity : ComponentActivity() {
 
-    private lateinit var recipeViewModel: RecipeViewModel
+    private lateinit var recipeViewModel: Lazy<RecipeViewModel>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             TasteTroveTheme {
-                val navController = rememberNavController()
+                val navController = rememberNavController() // Create and remember instance of NavController across composables.
+                // (NavController should be in composable, not inside activity so we are going to add it in Theme)
                 val selectedIndex = remember { mutableStateOf(0) }
-                val navItems = listOf(NavItem.Home, NavItem.Search, NavItem.SavedRecipes)
+                val navItems = listOf(NavItem.Home, NavItem.Search, NavItem.SavedRecipes) // Specify navigation structure
 
                 Scaffold (
                     bottomBar = { BottomBar (navItems,selectedIndex, onNavigate = { path ->
@@ -40,7 +42,7 @@ class MainActivity : ComponentActivity() {
                     Column(
                         modifier = Modifier.padding(innerPadding)
                     ) {
-                        AppNavHost(navController)
+                        AppNavHost(navController, viewModel = recipeViewModel)
 
                     }
                 }
