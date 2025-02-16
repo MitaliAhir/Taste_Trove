@@ -62,4 +62,8 @@ dependencies {
     // Retrofit for API calls
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
+
+    // For image loading
+    implementation(libs.coil3.coil.compose)
+    implementation(libs.coil.network.okhttp)
 }
