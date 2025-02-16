@@ -18,6 +18,9 @@ class RecipeViewModel(private val recipeRepository: RecipeRepository) : ViewMode
     private val _recipes = MutableLiveData<List<Recipe>>()
     val recipes: LiveData<List<Recipe>> get() = _recipes
 
+    private val _recipeDetails = MutableLiveData<RecipeDetails>()
+    val recipeDetails: LiveData<RecipeDetails> get() = _recipeDetails
+
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
 
@@ -56,6 +59,18 @@ class RecipeViewModel(private val recipeRepository: RecipeRepository) : ViewMode
                 _recipes.value = result
             } catch (e: Exception) {
                 Log.e("RecipeViewModel", "Error fetching recipes", e)
+            } finally {
+                _loading.value = false
+            }
+        }
+    }
+    fun fetchRecipeDetails(id: Int) {
+        viewModelScope.launch {
+            _loading.value = true
+            try {
+                _recipeDetails.value = recipeRepository.getRecipeDetails(id)
+            } catch (e: Exception) {
+                Log.e("RecipeViewModel", "Error fetching recipe details", e)
             } finally {
                 _loading.value = false
             }

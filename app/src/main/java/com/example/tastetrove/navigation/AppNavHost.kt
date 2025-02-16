@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.tastetrove.model.RecipeViewModel
 import com.example.tastetrove.views.HomeScreen
+import com.example.tastetrove.views.RecipeDetailScreen
 import com.example.tastetrove.views.SavedRecipesScreen
 import com.example.tastetrove.views.SearchScreen
 
@@ -21,10 +22,16 @@ fun AppNavHost(navController: NavHostController, viewModel: RecipeViewModel) {
         composable("search") {
             SearchScreen(
                 viewModel = viewModel
-            )
+            ) { recipeId ->
+                navController.navigate("recipeDetail/$recipeId")
+            }
         }
         composable("saved") {
              SavedRecipesScreen()
+        }
+        composable("recipeDetail/{recipeId}") { backStackEntry ->
+            val recipeId = backStackEntry.arguments?.getString("recipeId")?.toInt() ?: return@composable
+            RecipeDetailScreen(viewModel, recipeId)
         }
     }
 

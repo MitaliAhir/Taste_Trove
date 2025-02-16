@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -35,14 +36,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 @Composable
-fun SearchScreen(viewModel: RecipeViewModel = viewModel()) {
+fun SearchScreen(viewModel: RecipeViewModel = viewModel(), onRecipeClick: (Int) -> Unit) {
     val ingredients by viewModel.ingredients.observeAsState(emptyList())
     val recipes by viewModel.recipes.observeAsState(emptyList())
     val selectedIngredients = remember { mutableStateListOf<String>() }
     var searchText by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.padding(16.dp)) {
-        // Search bar
         SearchBarUI(
             searchText = searchText,
             onValueChange = { query ->
@@ -50,19 +50,13 @@ fun SearchScreen(viewModel: RecipeViewModel = viewModel()) {
                 if (searchText.isNotEmpty()) {
                     // Find matching ingredients or recipes
                     viewModel.searchRecipesByIngredients(searchText)
-                } else {
-                    // Clear results or show default state
                 }
             }
         )
-
+        Spacer(modifier = Modifier.height(16.dp))
         // Ingredient selection list
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            item {
-                Text("Select Ingredients", style = MaterialTheme.typography.headlineMedium)
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-
+        Text("Select Ingredients", style = MaterialTheme.typography.headlineMedium)
+        LazyColumn(modifier = Modifier.fillMaxHeight(0.3f)) {
             items(ingredients) { ingredient ->
                 IngredientItem(
                     ingredient = ingredient,
@@ -78,19 +72,19 @@ fun SearchScreen(viewModel: RecipeViewModel = viewModel()) {
                     }
                 )
             }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
 
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text("Recipes Based on Selected Ingredients", style = MaterialTheme.typography.headlineMedium)
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-
+        Text("Recipes Based on Selected Ingredients", style = MaterialTheme.typography.headlineMedium)
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(recipes) { recipe ->
-                RecipeCard(recipeName = recipe.title, time = "30 min", imageUrl = recipe.image)
+                RecipeCard(recipeName = recipe.title, time = "30 min", imageUrl = recipe.image, onClick = {
+                    onRecipeClick(recipe.id)
+                })
+            }
             }
         }
     }
-}
 
 @Composable
 fun SearchBarUI(
@@ -100,7 +94,7 @@ fun SearchBarUI(
     TextField(
         value = searchText,
         onValueChange = onValueChange,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
         placeholder = { Text("Search for ingredients...") },
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") }
     )
@@ -129,5 +123,5 @@ fun IngredientItem(
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    //SearchScreen()
+    //SearchScreen(viewModel(), onRecipeClick = onClick())
 }

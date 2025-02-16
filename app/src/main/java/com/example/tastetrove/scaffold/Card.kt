@@ -1,6 +1,7 @@
 package com.example.tastetrove.scaffold
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,10 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RecipeCard(recipeName: String, time: String, imageUrl: String) {
+fun RecipeCard(recipeName: String, time: String, imageUrl: String, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.padding(8.dp).fillMaxWidth(),
-        shape = MaterialTheme.shapes.medium
+        modifier = Modifier.padding(8.dp).fillMaxWidth().clickable(onClick = onClick),
+        shape = MaterialTheme.shapes.medium,
+
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -28,4 +30,3 @@ fun RecipeCard(recipeName: String, time: String, imageUrl: String) {
         }
     }
 }
-
