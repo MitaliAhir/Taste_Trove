@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tastetrove.room.RecipeEntity
 import kotlinx.coroutines.launch
 
 //The ViewModel will expose LiveData (or StateFlow) to the UI, which the View (Activity/Fragment) observes.
@@ -18,26 +19,29 @@ class RecipeViewModel(private val recipeRepository: RecipeRepository) : ViewMode
     private val _recipes = MutableLiveData<List<Recipe>>()
     val recipes: LiveData<List<Recipe>> get() = _recipes
 
-    private val _recipeDetails = MutableLiveData<RecipeDetails>()
-    val recipeDetails: LiveData<RecipeDetails> get() = _recipeDetails
+    private val _recipeDetails = MutableLiveData<Recipe>()
+    val recipeDetails: LiveData<Recipe> get() = _recipeDetails
+
+    private val _savedRecipes = MutableLiveData<List<RecipeEntity>>()
+    val savedRecipes: LiveData<List<RecipeEntity>> get() = _savedRecipes
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
 
     private val selectedIngredients = mutableListOf<String>()
 
-    fun fetchIngredients() {
-        viewModelScope.launch {
-            _loading.value = true
-            try {
-                _ingredients.value = recipeRepository.getIngredients()
-            } catch (e: Exception) {
-                Log.e("RecipeViewModel", "Error fetching ingredients", e)
-            } finally {
-                _loading.value = false
-            }
-        }
-    }
+//    fun fetchIngredients() {
+//        viewModelScope.launch {
+//            _loading.value = true
+//            try {
+//                _ingredients.value = recipeRepository.getIngredients()
+//            } catch (e: Exception) {
+//                Log.e("RecipeViewModel", "Error fetching ingredients", e)
+//            } finally {
+//                _loading.value = false
+//            }
+//        }
+//    }
 
     fun addIngredient(ingredient: String) {
         if (!selectedIngredients.contains(ingredient)) {
@@ -74,6 +78,39 @@ class RecipeViewModel(private val recipeRepository: RecipeRepository) : ViewMode
                 Log.e("RecipeViewModel", "Error fetching recipe details", e)
             } finally {
                 _loading.value = false
+            }
+        }
+    }
+
+    fun saveRecipe(recipeEntity: RecipeEntity) {
+        viewModelScope.launch {
+            try {
+                recipeRepository.saveRecipe(recipeEntity)
+                fetchSavedRecipes()
+            } catch (e: Exception) {
+                Log.e("RecipeViewModel", "Error saving recipe", e)
+            }
+        }
+    }
+
+    fun fetchSavedRecipes() {
+        viewModelScope.launch {
+            try {
+                val savedRecipes = recipeRepository.getAllSavedRecipes()
+                _savedRecipes.value = savedRecipes
+            } catch (e: Exception) {
+                Log.e("RecipeViewModel", "Error fetching saved recipes", e)
+            }
+        }
+    }
+
+    fun deleteRecipe(recipeId: Int) {
+        viewModelScope.launch {
+            try {
+                recipeRepository.deleteRecipe(recipeId)
+                fetchSavedRecipes()
+            } catch (e: Exception) {
+                Log.e("RecipeViewModel", "Error deleting recipe", e)
             }
         }
     }

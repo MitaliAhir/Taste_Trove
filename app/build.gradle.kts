@@ -1,7 +1,9 @@
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt") apply true
 }
 
 android {
@@ -66,4 +68,9 @@ dependencies {
     // For image loading
     implementation(libs.coil3.coil.compose)
     implementation(libs.coil.network.okhttp)
+    
+    // Room database
+    implementation (libs.androidx.room.runtime)
+   // kapt (libs.androidx.room.compiler)
+    implementation (libs.androidx.room.ktx)
 }

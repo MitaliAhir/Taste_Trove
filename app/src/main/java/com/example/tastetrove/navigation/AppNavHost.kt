@@ -27,7 +27,7 @@ fun AppNavHost(navController: NavHostController, viewModel: RecipeViewModel) {
             }
         }
         composable("saved") {
-             SavedRecipesScreen()
+             SavedRecipesScreen(viewModel)
         }
         composable("recipeDetail/{recipeId}") { backStackEntry ->
             val recipeId = backStackEntry.arguments?.getString("recipeId")?.toInt() ?: return@composable

@@ -46,7 +46,7 @@ fun SearchScreen(viewModel: RecipeViewModel = viewModel(), onRecipeClick: (Int) 
 
     // Call fetchIngredients when the SearchScreen composable is first composed
     LaunchedEffect(Unit) {
-        viewModel.fetchIngredients()
+        //viewModel.fetchIngredients()
     }
     val ingredients by viewModel.ingredients.observeAsState(emptyList())
     val recipes by viewModel.recipes.observeAsState(emptyList())
@@ -66,30 +66,30 @@ fun SearchScreen(viewModel: RecipeViewModel = viewModel(), onRecipeClick: (Int) 
         )
         Spacer(modifier = Modifier.height(16.dp))
         // Ingredient selection list
-        Text("Select Ingredients", style = MaterialTheme.typography.headlineMedium)
-        LazyColumn(modifier = Modifier.fillMaxHeight(0.3f)) {
-            items(ingredients) { ingredient ->
-                IngredientItem(
-                    ingredient = ingredient,
-                    isSelected = selectedIngredients.contains(ingredient.name),
-                    onClick = {
-                        if (selectedIngredients.contains(ingredient.name)) {
-                            selectedIngredients.remove(ingredient.name)
-                            viewModel.removeIngredient(ingredient.name)
-                        } else {
-                            selectedIngredients.add(ingredient.name)
-                            viewModel.addIngredient(ingredient.name)
-                        }
-                    }
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
+//        Text("Select Ingredients", style = MaterialTheme.typography.headlineMedium)
+//        LazyColumn(modifier = Modifier.fillMaxHeight(0.3f)) {
+//            items(ingredients) { ingredient ->
+//                IngredientItem(
+//                    ingredient = ingredient,
+//                    isSelected = selectedIngredients.contains(ingredient.name),
+//                    onClick = {
+//                        if (selectedIngredients.contains(ingredient.name)) {
+//                            selectedIngredients.remove(ingredient.name)
+//                            viewModel.removeIngredient(ingredient.name)
+//                        } else {
+//                            selectedIngredients.add(ingredient.name)
+//                            viewModel.addIngredient(ingredient.name)
+//                        }
+//                    }
+//                )
+//            }
+//        }
+//        Spacer(modifier = Modifier.height(16.dp))
 
         Text("Recipes Based on Selected Ingredients", style = MaterialTheme.typography.headlineMedium)
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(recipes) { recipe ->
-                RecipeCard(recipeName = recipe.title, time = "30 min", imageUrl = recipe.image, onClick = {
+                RecipeCard(recipeName = recipe.title, time = "${recipe.readyInMinutes} min", imageUrl = recipe.image, onClick = {
                     onRecipeClick(recipe.id)
                 })
             }
@@ -105,8 +105,8 @@ fun SearchBarUI(
     TextField(
         value = searchText,
         onValueChange = onValueChange,
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
-        placeholder = { Text("Search for ingredients...") },
+        modifier = Modifier.fillMaxWidth(),
+        placeholder = { Text("Search by ingredients...") },
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") }
     )
 }

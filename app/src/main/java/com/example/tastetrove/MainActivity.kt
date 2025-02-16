@@ -23,6 +23,7 @@ import com.example.tastetrove.scaffold.BottomBar
 import com.example.tastetrove.scaffold.TopBar
 import com.example.tastetrove.ui.theme.TasteTroveTheme
 import com.example.tastetrove.networking.RetrofitInstance
+import com.example.tastetrove.room.RecipeDatabase
 
 class MainActivity : ComponentActivity() {
 
@@ -34,9 +35,12 @@ class MainActivity : ComponentActivity() {
 
         // Create an instance of your RecipeAPIService
         //val apiService = RetrofitInstance.createService(RecipeAPIService::class.java)
+        val database = RecipeDatabase.getDatabase(applicationContext)
+        val recipeDao = database.recipeDao()
+
 
         // Create an instance of your RecipeRepository
-        val recipeRepository = RecipeRepository(RetrofitInstance.recipeAPI)
+        val recipeRepository = RecipeRepository(RetrofitInstance.recipeAPI, recipeDao)
 
         // Initialize the ViewModel with the factory
         val factory = RecipeViewModelFactory(recipeRepository)
