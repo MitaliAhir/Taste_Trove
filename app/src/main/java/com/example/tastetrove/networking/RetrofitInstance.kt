@@ -9,26 +9,14 @@ object RetrofitInstance {
 
     private const val BASE_URL  = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/"
 
-    // Create a custom OkHttpClient with increased timeouts to handle slow network responses
-    private val okHttpClient = OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS)  // Connection timeout
-        .readTimeout(30, TimeUnit.SECONDS)     // Read timeout
-        .writeTimeout(30, TimeUnit.SECONDS)    // Write timeout
+    // Retrofit instance for Recipe Search API
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    // Retrofit instance for Recipe Search API
-    private val retrofitObject =
-        Retrofit.Builder().
-        addConverterFactory(GsonConverterFactory.create()).
-        baseUrl(BASE_URL).
-        client(okHttpClient).
-        build()
-
     // API interface for Recipe Search API
-    //val recipeAPI = retrofitObject.create(RecipeAPIService::class.java)
+    val recipeAPI: RecipeAPIService = retrofit.create(RecipeAPIService::class.java)
 
-    fun <T> createService(serviceClass: Class<T>): T {
-        return retrofitObject.create(serviceClass)
-    }
 
 }

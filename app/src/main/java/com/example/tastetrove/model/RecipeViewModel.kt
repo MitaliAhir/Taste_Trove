@@ -64,11 +64,12 @@ class RecipeViewModel(private val recipeRepository: RecipeRepository) : ViewMode
             }
         }
     }
-    fun fetchRecipeDetails(id: Int) {
+    fun fetchRecipeDetails(recipeId: Int) {
         viewModelScope.launch {
             _loading.value = true
             try {
-                _recipeDetails.value = recipeRepository.getRecipeDetails(id)
+                val details = recipeRepository.getRecipeDetails(recipeId)
+                _recipeDetails.value = details
             } catch (e: Exception) {
                 Log.e("RecipeViewModel", "Error fetching recipe details", e)
             } finally {

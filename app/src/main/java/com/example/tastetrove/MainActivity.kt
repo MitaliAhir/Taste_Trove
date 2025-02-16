@@ -19,7 +19,6 @@ import com.example.tastetrove.model.RecipeViewModel
 import com.example.tastetrove.model.RecipeViewModelFactory
 import com.example.tastetrove.navigation.AppNavHost
 import com.example.tastetrove.navigation.NavItem
-import com.example.tastetrove.networking.RecipeAPIService
 import com.example.tastetrove.scaffold.BottomBar
 import com.example.tastetrove.scaffold.TopBar
 import com.example.tastetrove.ui.theme.TasteTroveTheme
@@ -34,10 +33,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         // Create an instance of your RecipeAPIService
-        val apiService = RetrofitInstance.createService(RecipeAPIService::class.java)
+        //val apiService = RetrofitInstance.createService(RecipeAPIService::class.java)
 
         // Create an instance of your RecipeRepository
-        val recipeRepository = RecipeRepository(apiService)
+        val recipeRepository = RecipeRepository(RetrofitInstance.recipeAPI)
 
         // Initialize the ViewModel with the factory
         val factory = RecipeViewModelFactory(recipeRepository)
@@ -68,21 +67,6 @@ class MainActivity : ComponentActivity() {
 
     }
 }
-// ViewModelProvider setup
-//        recipeViewModel = ViewModelProvider(this).get(RecipeViewModel::class.java)
-//        // Observe LiveData for recipes
-//        recipeViewModel.recipes.observe(this, Observer { recipes ->
-//            // Update UI with the list of recipes
-//            // Show recipes in a RecyclerView, for example
-//        })
-//
-//        // Observe loading state
-//        recipeViewModel.loading.observe(this, Observer { isLoading ->
-//            // Show loading spinner or something when isLoading is true
-//        })
-//
-//        // Trigger recipe search
-//        recipeViewModel.searchRecipes("tomato, cheese")  // Example search query
 
 @Preview(showBackground = true)
 @Composable
